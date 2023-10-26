@@ -97,12 +97,18 @@ The WS2812 PIO program uses one state machine, six instructions and one DMA inte
 WS2812_DRIVER = vendor
 ```
 
+<<<<<<< HEAD
 ### PWM Driver :id=pwm-driver
 
 This driver is ARM-only, and leverages the onboard PWM peripheral and DMA to offload processing from the CPU.
 
 ```make
 WS2812_DRIVER = pwm
+=======
+You may optionally switch the PIO peripheral used with the following define in config.h:
+```c
+#define WS2812_PIO_USE_PIO1 // Force the usage of PIO1 peripheral, by default the WS2812 implementation uses the PIO0 peripheral
+>>>>>>> e0c00c35ce (Clarify PIO define is optional in docs. (#22339))
 ```
 
 ### SPI Driver :id=spi-driver
