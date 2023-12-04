@@ -45,11 +45,6 @@
             "bootloader": "rp2040",
             "processor": "RP2040"
         },
-        "imera": {
-            "processor": "RP2040",
-            "bootloader": "rp2040",
-            "board": "QMK_PM2040"
-        },
         "kb2040": {
             "board": "QMK_PM2040",
             "bootloader": "rp2040",
@@ -58,6 +53,14 @@
         "liatris": {
             "board": "QMK_PM2040",
             "bootloader": "rp2040",
+<<<<<<< HEAD
+            "board": "QMK_PM2040"
+        },
+        "imera": {
+            "processor": "RP2040",
+            "bootloader": "rp2040",
+            "board": "QMK_PM2040"
+=======
             "processor": "RP2040"
         },
         "michi": {
@@ -84,6 +87,7 @@
             "board": "STEMCELL",
             "bootloader": "tinyuf2",
             "processor": "STM32F411"
+>>>>>>> c1b385ce0f (Sort defaults.hjson (#22587))
         }
     }
 }
