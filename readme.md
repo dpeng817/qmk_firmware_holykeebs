@@ -1,6 +1,6 @@
 This is my fork of holykeebs' fork of the main qmk repo. In here, you'll find the settings I used to get my corne with dual trackballs configured correctly.
 
-I found the pimoroni trackball a bit difficult to use out of the box, and thus used some custom qmk settings to get things working. However, there isn't much available about dual trackball setups.
+I found the pimoroni trackball a bit difficult to use out of the box, and thus used some custom qmk settings to get things working. However, there isn't much content available about dual trackball setups.
 
 The settings for the corne are under `keyboards/crkbd/rev1/keymaps/dpng`.
 
