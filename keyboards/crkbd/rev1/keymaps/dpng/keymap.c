@@ -113,21 +113,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,    KC_1,       KC_2,       KC_3,       KC_NO,       KC_NO,               KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_BSPC,
     KC_ESC,    KC_4,       KC_5,       KC_6,       M_ALFRED,    M_HMRW,              KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_NO,
     KC_LSFT,   KC_7,       KC_8,       KC_9,       M_SCRSHT,    M_ARROW,             KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_LCTL,
-                                       KC_0,       MO(1),       KC_BTN1,             KC_NO,    KC_SPC,      MO(3)                          
+                                       KC_0,       MO(2),       KC_BTN2,             KC_NO,    KC_SPC,      MO(1)                          
   ),
   // Programming characters and vim macros
   [2] = LAYOUT_split_3x6_3(
     KC_TAB,    KC_EXLM,    KC_AT,      KC_HASH,    KC_NO,       KC_NO,               KC_EQL,   KC_LCBR,     KC_RCBR,    KC_PIPE,  KC_P,     KC_BSPC,
-    KC_ESC,    KC_HASH,    KC_PERC,    KC_CIRC,    KC_NO,       KC_NO,               KC_MINS,  KC_LBRC,     KC_RBRC,    KC_BSLS,  KC_SCLN,  KC_DQUO,
+    KC_ESC,    KC_HASH,    KC_PERC,    KC_CIRC,    M_ALFRED,    M_HMRW,              KC_MINS,  KC_LBRC,     KC_RBRC,    KC_BSLS,  KC_SCLN,  KC_DQUO,
     KC_LSFT,   KC_AMPR,    KC_ASTR,    KC_NO,      KC_NO,       KC_NO,               KC_UNDS,  KC_LABK,     KC_RABK,    KC_GRAVE, KC_TILD,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       KC_BTN2,             KC_NO,    KC_SPC,      MO(3)                        
+                                       KC_LGUI,    MO(2),       KC_BTN2,             KC_NO,    KC_SPC,      MO(1)                        
   ),
   // ? Haven't figured out what to put here yet. Probably system stuff.
   [2] = LAYOUT_split_3x6_3(
     KC_TAB,    KC_EXLM,    KC_AT,      KC_HASH,    KC_NO,       KC_NO,               KC_EQL,   KC_LCBR,     KC_RCBR,    KC_PIPE,  KC_P,     KC_BSPC,
     KC_ESC,    KC_HASH,    KC_PERC,    KC_CIRC,    KC_NO,       KC_NO,               KC_MINS,  KC_LBRC,     KC_RBRC,    KC_BSLS,  KC_SCLN,  KC_DQUO,
     KC_LSFT,   KC_AMPR,    KC_ASTR,    KC_NO,      KC_NO,       KC_NO,               KC_UNDS,  KC_LABK,     KC_RABK,    KC_GRAVE, KC_TILD,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       KC_BTN2,             KC_NO,    KC_SPC,      MO(3)                        
+                                       KC_LGUI,    MO(2),       KC_BTN2,             KC_NO,    KC_SPC,      MO(1)                        
   ),
 };
 
