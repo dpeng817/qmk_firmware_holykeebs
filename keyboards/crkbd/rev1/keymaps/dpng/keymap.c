@@ -110,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   // General use macros, numbers
 	[1] = LAYOUT_split_3x6_3(
-    KC_TAB,    KC_1,       KC_2,       KC_3,       KC_NO,       KC_NO,               KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_BSPC,
+    KC_TAB,    KC_1,       KC_2,       KC_3,       QK_CLEAR_EEPROM,       KC_NO,               KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_BSPC,
     KC_ESC,    KC_4,       KC_5,       KC_6,       M_ALFRED,    M_HMRW,              KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_NO,
     KC_LSFT,   KC_7,       KC_8,       KC_9,       M_SCRSHT,    M_ARROW,             KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_LCTL,
                                        KC_0,       MO(2),       KC_BTN2,             KC_NO,    KC_SPC,      MO(1)                          
