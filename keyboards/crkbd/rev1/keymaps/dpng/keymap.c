@@ -150,7 +150,7 @@ float scroll_accumulated_v = 0;
 float accumulated_factor = MIN_SCALE;
 
 // Arrow keys slight slowing
-#define ARROW_STEP 4
+#define ARROW_STEP 20
 int accumulated_arrow_x = 0;
 int accumulated_arrow_y = 0;
 
