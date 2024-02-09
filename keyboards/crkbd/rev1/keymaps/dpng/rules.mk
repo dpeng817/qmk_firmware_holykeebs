@@ -1,5 +1,4 @@
 SERIAL_DRIVER = vendor
-VIA_ENABLE = yes
 
 
 # Disable things we don't support that take up unnecessary space.
