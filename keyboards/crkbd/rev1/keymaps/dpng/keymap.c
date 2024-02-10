@@ -20,7 +20,8 @@ bool mouse_switch = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case B_MOUSE:
-      if(record->tap.count && record->event.pressed) {
+      // can't get mod tap to work for now. Just use tap code for now.
+      if(record->event.pressed) {
         tap_code16(KC_BTN1);
       }  
       // if(record->tap.count && record->event.pressed) {
@@ -65,30 +66,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Regular keys
   [0] = LAYOUT_split_3x6_3(
     KC_TAB,    KC_Q,       KC_W,       KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     KC_BSPC,
-    KC_ESC,    KC_A,       KC_S,       KC_D,       KC_F,        KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
+    KC_ESC,    KC_A,       KC_S,       KC_D,       MT(MOD_LGUI, KC_F),        KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
     KC_LSFT,   KC_Z,       KC_X,       KC_C,       KC_V,        KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
                                        KC_LGUI,    MO(1),       B_MOUSE,             KC_NO,    KC_SPC,     MO(2)                        
   ),
-  // General use macros, numbers
+  // Macro layer
 	[1] = LAYOUT_split_3x6_3(
     KC_TAB,    KC_1,       KC_2,       KC_3,       QK_CLEAR_EEPROM,       M_SWITCH_MOUSE,               KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_BSPC,
     KC_ESC,    KC_4,       KC_5,       KC_6,       M_ALFRED,    M_HMRW,              KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_NO,
     KC_LSFT,   KC_7,       KC_8,       KC_9,       M_SCRSHT,    KC_NO,             KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_LCTL,
                                        KC_0,       MO(1),       B_MOUSE,             KC_NO,    KC_SPC,      MO(2)                          
   ),
-  // Programming characters and vim macros
+  // Symbolic/numeric layer
   [2] = LAYOUT_split_3x6_3(
-    KC_TAB,    KC_EXLM,    KC_AT,      KC_HASH,    KC_NO,       KC_NO,               KC_EQL,   KC_LCBR,     KC_RCBR,    KC_PIPE,  KC_P,     KC_BSPC,
-    KC_ESC,    KC_HASH,    KC_PERC,    KC_CIRC,    M_ALFRED,    M_HMRW,              KC_MINS,  KC_LBRC,     KC_RBRC,    KC_BSLS,  KC_SCLN,  KC_DQUO,
-    KC_LSFT,   KC_AMPR,    KC_ASTR,    KC_NO,      KC_NO,       KC_NO,               KC_UNDS,  KC_LABK,     KC_RABK,    KC_GRAVE, KC_TILD,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       B_MOUSE,             KC_NO,    KC_SPC,      MO(2)                        
-  ),
-  // ? Haven't figured out what to put here yet. Probably system stuff.
-  [2] = LAYOUT_split_3x6_3(
-    KC_TAB,    KC_EXLM,    KC_AT,      KC_HASH,    KC_NO,       KC_NO,               KC_EQL,   KC_LCBR,     KC_RCBR,    KC_PIPE,  KC_P,     KC_BSPC,
-    KC_ESC,    KC_HASH,    KC_PERC,    KC_CIRC,    KC_NO,       KC_NO,               KC_MINS,  KC_LBRC,     KC_RBRC,    KC_BSLS,  KC_SCLN,  KC_DQUO,
-    KC_LSFT,   KC_AMPR,    KC_ASTR,    KC_NO,      KC_NO,       KC_NO,               KC_UNDS,  KC_LABK,     KC_RABK,    KC_GRAVE, KC_TILD,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       B_MOUSE,             KC_NO,    KC_SPC,      MO(2)                        
+    KC_TAB,    KC_EXLM,    KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_UP,    KC_7,     KC_8,    KC_9,  KC_ASTR,  KC_RABK,
+    KC_ESC,    KC_HASH,    KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_DOWN,  KC_4,     KC_5,    KC_6,  KC_PLUS,  KC_LABK,
+    KC_LSFT,   KC_PERC,    KC_CIRC,    KC_LCBR,    KC_RCBR,       KC_TILD,             KC_AMPR,  KC_1,     KC_2,    KC_3,  KC_SLSH,  KC_EQL,
+                                       KC_LGUI,    MO(1),         B_MOUSE,             KC_NO,    KC_SPC,   KC_0                        
   ),
 };
 
