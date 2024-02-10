@@ -1,9 +1,10 @@
 #include "action.h"
 #include "math.h"
 #include "dpng.h"
+#include <time.h>
+
 #include QMK_KEYBOARD_H
 
-#define BW_TAP_TIME 200  //configure max tap time, 200ms here
 
 enum custom_keycodes {
   M_ALFRED = SAFE_RANGE, // Opens alfred in arc mode
@@ -21,12 +22,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case B_MOUSE:
       if(record->tap.count && record->event.pressed) {
         tap_code16(KC_BTN1);
-        return false;
-      } else if (record->event.pressed) {
-        tap_code16(KC_BTN2);
-        return false;
-      }
-      return true;
+      }  
+      // if(record->tap.count && record->event.pressed) {
+      //   tap_code16(KC_BTN1);
+      // } 
+      // else if (record->event.pressed) {
+      //   tap_code16(KC_BTN2);
+      // }
+      return false;
     // opens alfred in arc mode
     case M_ALFRED:
       if (record->event.pressed) {
@@ -99,12 +102,18 @@ float scroll_accumulated_v = 0;
 
 // Modify these to adjust non-linear mouse scaling
 #define MAX_SCALE 32
-#define MIN_SCALE 0.0001
-#define GROWTH_FACTOR 16
-#define MOMENTUM 0.0005
+#define MIN_SCALE 0.5
+#define GROWTH_FACTOR 1
+#define MOMENTUM 0.1
+#define RESET_MOMENTUM 1 // After 1 second of inactivity, reset the momentum
 
 // Variable to store an exponential moving average scaling factor to denoise the non-linear scaling
 float accumulated_factor = MIN_SCALE;
+int last_update_timestamp = 0;
+report_mouse_t last_left_report;
+report_mouse_t last_right_report;
+
+
 
 // Arrow keys slight slowing
 #define ARROW_STEP 20
@@ -117,6 +126,16 @@ float average_arrow_y = 0;
 #define ARROW_MOMENTUM 0.01
 
 report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, report_mouse_t right_report) {
+    // Get time elapsed since last update
+    int current_timestamp = time(NULL);
+    int time_elapsed = current_timestamp - last_update_timestamp;
+    last_update_timestamp = current_timestamp;
+    if (!has_mouse_report_changed(&left_report, &last_left_report) && !has_mouse_report_changed(&right_report, &last_right_report) && time_elapsed > RESET_MOMENTUM) {
+        // If no mouse movement has been detected, reset the momentum
+        accumulated_factor = MIN_SCALE;
+    }
+
+    // If the time elapsed is over 
     report_mouse_t main_report = right_report;
     report_mouse_t sub_report = left_report;
     if (mouse_switch) {
@@ -234,10 +253,18 @@ report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, re
         }
     }
 
+    // Left is sub, right is main
     if (mouse_switch) {
         return pointing_device_combine_reports(sub_report, main_report);
+        // Save reports
+        last_left_report = sub_report;
+        last_right_report = main_report;
+    // Right is sub, left is main
     } else {
         return pointing_device_combine_reports(main_report, sub_report);
+        // Save reports
+        last_left_report = main_report;
+        last_right_report = sub_report;
     }
 }
 
