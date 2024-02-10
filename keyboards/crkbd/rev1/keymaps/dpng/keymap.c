@@ -6,70 +6,27 @@
 #define BW_TAP_TIME 200  //configure max tap time, 200ms here
 
 enum custom_keycodes {
-  BW_BTN1_BTN2 = SAFE_RANGE, // Combined click (KC_BTN1) and right click (KC_BTN2) (never got this one to work)
-  BW_TAB_L3, // Combined tab and activate layer 3 when held
-  BW_ENTER_CTL, // Combined enter and ctrl
-  BW_SPC_ALT, // Combined space and alt
-  M_ALFRED, // Opens alfred in arc mode
+  M_ALFRED = SAFE_RANGE, // Opens alfred in arc mode
   M_HMRW, // Opens homerow
   M_SCRSHT, // Activates screenshot mode on mac
   M_SWITCH_MOUSE, // Switches mouse behavior
+  B_MOUSE, // Mouse left click on tap, right click on hold
 };
 
 // For mouse switching behavior
 bool mouse_switch = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  static uint16_t tab_l3_timer;
-  static uint16_t enter_ctl_timer;
-  static uint16_t spc_alt_timer;
-  static uint16_t btn1_btn2_timer;
   switch (keycode) {
-
-    // combined click (KC_BTN1) and right click (KC_BTN2)
-    case BW_BTN1_BTN2:
-      if (record->event.pressed) {
-        btn1_btn2_timer = timer_read();
-        register_code(KC_BTN2);
-      } else {
-        unregister_code(KC_BTN2);
-        if (timer_elapsed(btn1_btn2_timer) < BW_TAP_TIME)
-          tap_code(KC_BTN1);
+    case B_MOUSE:
+      if(record->tap.count && record->event.pressed) {
+        tap_code16(KC_BTN1);
+        return false;
+      } else if (record->event.pressed) {
+        tap_code16(KC_BTN2);
+        return false;
       }
-      return false;
-    // Combined tab and l3 key
-    case BW_TAB_L3:
-      if (record->event.pressed) {
-        tab_l3_timer = timer_read();
-        layer_on(3); 
-      } else {
-        layer_off(3);
-        if (timer_elapsed(tab_l3_timer) < BW_TAP_TIME)
-          tap_code(KC_TAB);
-      }
-      return false;
-    // combined enter and control key
-    case BW_ENTER_CTL:
-      if (record->event.pressed) {
-        enter_ctl_timer = timer_read();
-        register_code(KC_LCTL); 
-      } else {
-        unregister_code(KC_LCTL); 
-        if (timer_elapsed(enter_ctl_timer) < BW_TAP_TIME)
-          tap_code(KC_ENT);
-      }
-      return false;
-    // combined space and alt key
-    case BW_SPC_ALT:
-      if (record->event.pressed) {
-        spc_alt_timer = timer_read();
-        register_code(KC_RALT); 
-      } else {
-        unregister_code(KC_RALT); 
-        if (timer_elapsed(spc_alt_timer) < BW_TAP_TIME)
-          tap_code(KC_SPC);
-      }
-      return false; 
+      return true;
     // opens alfred in arc mode
     case M_ALFRED:
       if (record->event.pressed) {
@@ -107,28 +64,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,    KC_Q,       KC_W,       KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     KC_BSPC,
     KC_ESC,    KC_A,       KC_S,       KC_D,       KC_F,        KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
     KC_LSFT,   KC_Z,       KC_X,       KC_C,       KC_V,        KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       KC_BTN1,             KC_NO,    KC_SPC,     MO(2)                        
+                                       KC_LGUI,    MO(1),       B_MOUSE,             KC_NO,    KC_SPC,     MO(2)                        
   ),
   // General use macros, numbers
 	[1] = LAYOUT_split_3x6_3(
     KC_TAB,    KC_1,       KC_2,       KC_3,       QK_CLEAR_EEPROM,       M_SWITCH_MOUSE,               KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_BSPC,
     KC_ESC,    KC_4,       KC_5,       KC_6,       M_ALFRED,    M_HMRW,              KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_NO,
     KC_LSFT,   KC_7,       KC_8,       KC_9,       M_SCRSHT,    KC_NO,             KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_LCTL,
-                                       KC_0,       MO(1),       KC_BTN2,             KC_NO,    KC_SPC,      MO(2)                          
+                                       KC_0,       MO(1),       B_MOUSE,             KC_NO,    KC_SPC,      MO(2)                          
   ),
   // Programming characters and vim macros
   [2] = LAYOUT_split_3x6_3(
     KC_TAB,    KC_EXLM,    KC_AT,      KC_HASH,    KC_NO,       KC_NO,               KC_EQL,   KC_LCBR,     KC_RCBR,    KC_PIPE,  KC_P,     KC_BSPC,
     KC_ESC,    KC_HASH,    KC_PERC,    KC_CIRC,    M_ALFRED,    M_HMRW,              KC_MINS,  KC_LBRC,     KC_RBRC,    KC_BSLS,  KC_SCLN,  KC_DQUO,
     KC_LSFT,   KC_AMPR,    KC_ASTR,    KC_NO,      KC_NO,       KC_NO,               KC_UNDS,  KC_LABK,     KC_RABK,    KC_GRAVE, KC_TILD,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       KC_BTN2,             KC_NO,    KC_SPC,      MO(2)                        
+                                       KC_LGUI,    MO(1),       B_MOUSE,             KC_NO,    KC_SPC,      MO(2)                        
   ),
   // ? Haven't figured out what to put here yet. Probably system stuff.
   [2] = LAYOUT_split_3x6_3(
     KC_TAB,    KC_EXLM,    KC_AT,      KC_HASH,    KC_NO,       KC_NO,               KC_EQL,   KC_LCBR,     KC_RCBR,    KC_PIPE,  KC_P,     KC_BSPC,
     KC_ESC,    KC_HASH,    KC_PERC,    KC_CIRC,    KC_NO,       KC_NO,               KC_MINS,  KC_LBRC,     KC_RBRC,    KC_BSLS,  KC_SCLN,  KC_DQUO,
     KC_LSFT,   KC_AMPR,    KC_ASTR,    KC_NO,      KC_NO,       KC_NO,               KC_UNDS,  KC_LABK,     KC_RABK,    KC_GRAVE, KC_TILD,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       KC_BTN2,             KC_NO,    KC_SPC,      MO(2)                        
+                                       KC_LGUI,    MO(1),       B_MOUSE,             KC_NO,    KC_SPC,      MO(2)                        
   ),
 };
 
