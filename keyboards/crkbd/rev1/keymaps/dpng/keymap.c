@@ -21,7 +21,8 @@
 
 enum custom_keycodes {
   M_SWITCH_MOUSE=SAFE_RANGE, // Switches mouse behavior
-  M_COPY_URL, // Copies current URL in arc
+  M_SCRSHT, // Takes a screenshot
+  M_SCRREC, // Starts a screen recording
 };
 
 bool caps_lock_on = false;
@@ -66,12 +67,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_code16(KC_BSLS);
       }
       return false;
-    case M_COPY_URL:
-      if (record->event.pressed) {
-        // Sequence is cmd shft c
-        SEND_STRING(SS_LGUI(SS_LSFT("c")));
-      }
-      return true;
     case C_COPY:
       if (!record->tap.count && record->event.pressed) {
         // Sequence is cmd c
@@ -132,6 +127,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_code16(KC_LCBR);
       }
       return false;
+    case M_SCRSHT:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd shift 4
+        SEND_STRING(SS_LGUI(SS_LSFT("4")));
+      }
+      return true;
+    case M_SCRREC:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd shift 5
+        SEND_STRING(SS_LGUI(SS_LSFT("5")));
+      }
+      return true;
   }
   return true;
 }
@@ -164,13 +171,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   // media layer
   // -----------------------------------------------------------------------------------------
-  // |    |     |     |  br- |      |  br+  |              |     |      |     |     |     |     |
-  // | L0 |     |     |  <<  | >/|| |  >>   |              |     |      |     |     |     |     |
-  // |    |     |     |  v-  |  v0  |  v+   |              |     |      |     |     |     |     |
-  //                  |      |      | MSE (Rght) |             |  spc | bspc|
+  // |    |     |  scrsht  |  br- |      |  br+  |              |     |      |     |     |     |     |
+  // | L0 |     |  scrrec  |  <<  | >/|| |  >>   |              |     |      |     |     |     |     |
+  // |    |     |          |  v-  |  v0  |  v+   |              |     |      |     |     |     |     |
+  //                       |      |      | MSE (Rght) |             |  spc | bspc|
   [2] = LAYOUT_split_3x6_3(
-    KC_NO,    KC_NO,       KC_NO,       KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    TO(0),    KC_NO,       KC_NO,       KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    TO(0),    KC_NO,       M_SCRREC,    KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     KC_NO,    KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,     KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
                                         KC_NO,                 TO(0),           BTN_MOUSE,            KC_NO,     KC_SPC,      KC_BSPC                      
   ), 
