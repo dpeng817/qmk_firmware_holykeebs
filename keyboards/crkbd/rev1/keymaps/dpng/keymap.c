@@ -174,7 +174,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // |    |     |  scrsht  |  br- |      |  br+  |              |     |      |     |     |     |     |
   // | L0 |     |  scrrec  |  <<  | >/|| |  >>   |              |     |      |     |     |     |     |
   // |    |     |          |  v-  |  v0  |  v+   |              |     |      |     |     |     |     |
-  //                       |      |      | MSE (Rght) |             |  spc | bspc|
+  //                       |      |      | MSE (Rght) |               |  spc | bspc|
   [2] = LAYOUT_split_3x6_3(
     KC_NO,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     TO(0),    KC_NO,       M_SCRREC,    KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
