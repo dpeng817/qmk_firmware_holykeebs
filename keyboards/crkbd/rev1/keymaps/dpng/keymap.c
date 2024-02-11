@@ -9,7 +9,13 @@
 #define D_ALFD LT(0, KC_D)
 #define C_COPY LT(0, KC_C)
 #define V_PSTE LT(0, KC_V)
+#define W_CLOSE LT(0, KC_W)
+#define ESC_CAPSLOCK LT(0, KC_ESC)
+#define Z_UNDO LT(0, KC_Z)
+#define S_SAVE LT(0, KC_S)
 #define SLSH LT(0, KC_SLSH)
+#define PERC_REDO LT(0, KC_PERC)
+#define LCBR_URL LT(0, KC_LCBR)
 
 
 
@@ -18,17 +24,8 @@ enum custom_keycodes {
   M_COPY_URL, // Copies current URL in arc
 };
 
-//Tap Dance Declarations
-enum {
-  TD_COPY_URL = 0
-};
+bool caps_lock_on = false;
 
-//Tap Dance Definitions
-tap_dance_action_t tap_dance_actions[] = {
-  // Tap once for c, twice for copy url, hold for generic copy
-  [TD_COPY_URL]  = ACTION_TAP_DANCE_DOUBLE(C_COPY, M_COPY_URL)
-// Other declarations would go here, separated by commas, if you have them
-};
 
 // For mouse switching behavior
 bool mouse_switch = false;
@@ -91,6 +88,50 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_code16(KC_V);
       }
       return false;
+    case W_CLOSE:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd w
+        SEND_STRING(SS_LGUI("w"));
+      } else if (record->event.pressed) {
+        tap_code16(KC_W);
+      }
+      return false;  
+    case ESC_CAPSLOCK:
+      if (!record->tap.count && record->event.pressed) {
+        // Press caps lock
+        tap_code16(KC_CAPS);
+        caps_lock_on = !caps_lock_on;
+      } else if (record->event.pressed) {
+        tap_code16(KC_ESC);
+        if (caps_lock_on) { // Allow escape to turn off caps lock
+          tap_code16(KC_CAPS);
+        }
+      }
+      return false;
+    case Z_UNDO:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd z
+        SEND_STRING(SS_LGUI("z"));
+      } else if (record->event.pressed) {
+        tap_code16(KC_Z);
+      }
+      return false;
+    case PERC_REDO:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd shft z
+        SEND_STRING(SS_LGUI(SS_LSFT("z")));
+      } else if (record->event.pressed) {
+        tap_code16(KC_PERC);
+      }
+      return false;
+    case LCBR_URL:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd shift c
+        SEND_STRING(SS_LGUI(SS_LSFT("c")));
+      } else if (record->event.pressed) {
+        tap_code16(KC_LCBR);
+      }
+      return false;
   }
   return true;
 }
@@ -99,42 +140,46 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Regular keys
   // -----------------------------------------------------------------------------------------
-  // |  tab   |  Q  |  W  |  E    |  R   |  T  |              |  Y  |  U   |  I  |  O  |  P  |  swtch mse  |
-  // |  esc   |  A  |  S  | D(alf)| F(hm)|  G  |              |  H  |  J   |  K  |  L  |  '  |  '          |
-  // |  shft  |  Z  |  X  |  C    |  V   |  B  |              |  N  |  M   |  ,  |  .  |  ;  |  entr       |
-  //                      |  cmd  | L1   | MSE (Rght) |             | spc  |bspc |
+  // |  tab       |  Q      |  W(cls)  | E       | R         |  T  |              |  Y  |  U   |  I  |  O  |  P  |  swtch mse  |
+  // |  esc(caps) |  A      |  S       | D(alf)  | F(hm)     |  G  |              |  H  |  J   |  K  |  L  |  '  |  '          |
+  // |  shft      |  Z(und) |  X       | C(copy) | V(pste)   |  B  |              |  N  |  M   |  ,  |  .  |  ;  |  entr       |
+  //                        |  cmd     | L1      | MSE (Rght)|                          | spc(ctrl)  |bspc |
   [0] = LAYOUT_split_3x6_3(
-    KC_TAB,    KC_Q,       KC_W,       KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     M_SWITCH_MOUSE,
-    KC_ESC,    KC_A,       KC_S,       D_ALFD,     F_HMRW,      KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
-    KC_LSFT,   KC_Z,       KC_X,       TD(TD_COPY_URL),     V_PSTE,      KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
-                                       KC_LGUI,    TO(1),       BTN_MOUSE,           KC_NO,    KC_SPC,     KC_BSPC                      
+    KC_TAB,        KC_Q,       W_CLOSE,    KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     M_SWITCH_MOUSE,
+    ESC_CAPSLOCK,  KC_A,       KC_S,       D_ALFD,     F_HMRW,      KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
+    KC_LSFT,       KC_Z,       KC_X,       C_COPY,     V_PSTE,      KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
+                                           KC_LGUI,    TO(1),       BTN_MOUSE,           KC_NO,    RCTL_T(KC_SPC),     KC_BSPC                      
   ),
   // Symbolic/numeric layer
   // -----------------------------------------------------------------------------------------
-  // |    |  !  |  @  |  [  |  ]  |  |  |              |  -  |  7 |  8  |  9  |  *  | / or \ |
-  // | L0 |  #  |  $  |  (  |  )  |  `  |              |  _  |  4 |  5  |  6  |  +  |  =     |
-  // |    |  %  |  ^  |  {  |  }  |  ~  |              |  &  |  1 |  2  |  3  |  0  |  entr  |
-  //                  |  -  | L2  | MSE (Rght) |             |  spc | bspc|
+  // |    |  !        |  @  |  [          |  ]  |  |  |              |  -  |  7   |  8  |  9  |  *  | / or \ |
+  // | L0 |  #        |  $  |  (          |  )  |  `  |              |  _  |  4   |  5  |  6  |  +  |  =     |
+  // |    |  %(redo)  |  ^  |  {(c url)  |  }  |  ~  |               |  &  |  1   |  2  |  3  |  0  |  entr  |
+  //                  |  -  | L2          | MSE (Rght) |             |  spc | bspc|
   [1] = LAYOUT_split_3x6_3(
-    KC_NO,    KC_EXLM,    KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_UNDS,    KC_7,     KC_8,    KC_9,  KC_ASTR,  SLSH,
-    TO(0),    KC_HASH,    KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_MINS,  KC_4,     KC_5,    KC_6,  KC_PLUS,  KC_EQL,
-    KC_NO,    KC_PERC,    KC_CIRC,    KC_LCBR,    KC_RCBR,       KC_TILD,             KC_AMPR,  KC_1,     KC_2,    KC_3,  KC_0,  KC_ENTER,
-                                      KC_LGUI,    TO(2),         BTN_MOUSE,           KC_NO,    KC_0,     KC_BSPC                        
+    KC_NO,        KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,  KC_7,     KC_8,    KC_9,  KC_ASTR,  SLSH,
+    TO(0),        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,  KC_4,     KC_5,    KC_6,  KC_PLUS,  KC_EQL,
+    KC_NO,        PERC_REDO,    KC_CIRC,    LCBR_URL,   KC_RCBR,       KC_TILD,             KC_MINS,  KC_1,     KC_2,    KC_3,  KC_0,  KC_ENTER,
+                                            KC_LGUI,    TO(2),         BTN_MOUSE,           KC_NO,    RCTL_T(KC_SPC),     KC_BSPC                        
   ),
   // media layer
+  // -----------------------------------------------------------------------------------------
+  // |    |     |     |  br- |      |  br+  |              |     |      |     |     |     |     |
+  // | L0 |     |     |  <<  | >/|| |  >>   |              |     |      |     |     |     |     |
+  // |    |     |     |  v-  |  v0  |  v+   |              |     |      |     |     |     |     |
+  //                  |      |      | MSE (Rght) |             |  spc | bspc|
   [2] = LAYOUT_split_3x6_3(
-    KC_NO,    KC_NO,       KC_NO,       KC_F14,                KC_F15,          KC_NO,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,    KC_NO,       KC_NO,       KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     TO(0),    KC_NO,       KC_NO,       KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    KC_NO,    KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,    KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,     KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
                                         KC_NO,                 TO(0),           BTN_MOUSE,            KC_NO,     KC_SPC,      KC_BSPC                      
   ), 
-  // nav layer
-  [3] = LAYOUT_split_3x6_3(
-    KC_NO,    KC_NO,       KC_NO,       KC_F14,                KC_F15,          KC_NO,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    TO(0),    KC_NO,       KC_NO,       KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    KC_NO,    KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-                                        KC_NO,                 TO(0),           BTN_MOUSE,            KC_NO,     KC_SPC,      KC_BSPC                      
-  ), 
+  // blank (for future use)
+  // -----------------------------------------------------------------------------------------
+  // |    |     |     |     |     |     |              |     |      |     |     |     |     |
+  // | L0 |     |     |     |     |     |              |     |      |     |     |     |     |
+  // |    |     |     |     |     |     |              |     |      |     |     |     |     |
+  //                  |     |     | MSE (Rght) |             |  spc | bspc|
 };
 
 // Modify these alues to adjust the scrolling speed
