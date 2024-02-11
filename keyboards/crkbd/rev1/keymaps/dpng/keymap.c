@@ -4,14 +4,30 @@
 #include <time.h>
 
 #include QMK_KEYBOARD_H
+#define BTN_MOUSE LT(0, KC_BTN1)
+#define F_HMRW LT(0, KC_F)
+#define D_ALFD LT(0, KC_D)
+#define C_COPY LT(0, KC_C)
+#define V_PSTE LT(0, KC_V)
+#define SLSH LT(0, KC_SLSH)
+
 
 
 enum custom_keycodes {
-  M_ALFRED = SAFE_RANGE, // Opens alfred in arc mode
-  M_HMRW, // Opens homerow
-  M_SCRSHT, // Activates screenshot mode on mac
-  M_SWITCH_MOUSE, // Switches mouse behavior
-  B_MOUSE, // Mouse left click on tap, right click on hold
+  M_SWITCH_MOUSE=SAFE_RANGE, // Switches mouse behavior
+  M_COPY_URL, // Copies current URL in arc
+};
+
+//Tap Dance Declarations
+enum {
+  TD_COPY_URL = 0
+};
+
+//Tap Dance Definitions
+tap_dance_action_t tap_dance_actions[] = {
+  // Tap once for c, twice for copy url, hold for generic copy
+  [TD_COPY_URL]  = ACTION_TAP_DANCE_DOUBLE(C_COPY, M_COPY_URL)
+// Other declarations would go here, separated by commas, if you have them
 };
 
 // For mouse switching behavior
@@ -19,44 +35,62 @@ bool mouse_switch = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case B_MOUSE:
-      // can't get mod tap to work for now. Just use tap code for now.
-      if(record->event.pressed) {
+    case BTN_MOUSE:
+      if(record->tap.count && record->event.pressed) {
         tap_code16(KC_BTN1);
-      }  
-      // if(record->tap.count && record->event.pressed) {
-      //   tap_code16(KC_BTN1);
-      // } 
-      // else if (record->event.pressed) {
-      //   tap_code16(KC_BTN2);
-      // }
+      } 
+      else if (record->event.pressed) {
+        tap_code16(KC_BTN2);
+      }
       return false;
     // opens alfred in arc mode
-    case M_ALFRED:
-      if (record->event.pressed) {
+    case D_ALFD:
+      if (!record->tap.count && record->event.pressed) {
         // Sequence is cmd space (delay 50) space
         SEND_STRING(SS_LGUI(" ") SS_DELAY(50) SS_TAP(X_SPC));
       }
-      return false;
+      return true;
     // activates homerow
-    case M_HMRW:
-      if (record->event.pressed) {
+    case F_HMRW:
+      if (!record->tap.count && record->event.pressed) {
         // Sequence is cmd shift s
         SEND_STRING(SS_LGUI(SS_LSFT("s")));
       }
-      return false;
-    // activates mac screenshot mode
-    case M_SCRSHT:
-      if (record->event.pressed) {
-        // Sequence is cmd shift 4
-        SEND_STRING(SS_LGUI(SS_LSFT("4")));
-      }
-      return false;
+      return true;
     case M_SWITCH_MOUSE:
       if (record->event.pressed) {
         mouse_switch = !mouse_switch;
       }
       return true;
+    case SLSH:
+      if (!record->tap.count && record->event.pressed) {
+        tap_code16(KC_SLSH);
+      } else if (record->event.pressed) {
+        tap_code16(KC_BSLS);
+      }
+      return false;
+    case M_COPY_URL:
+      if (record->event.pressed) {
+        // Sequence is cmd shft c
+        SEND_STRING(SS_LGUI(SS_LSFT("c")));
+      }
+      return true;
+    case C_COPY:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd c
+        SEND_STRING(SS_LGUI("c"));
+      } else if (record->event.pressed) {
+        tap_code16(KC_C);
+      }
+      return false;
+    case V_PSTE:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd v
+        SEND_STRING(SS_LGUI("v"));
+      } else if (record->event.pressed) {
+        tap_code16(KC_V);
+      }
+      return false;
   }
   return true;
 }
@@ -64,26 +98,43 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Organization is 6 keys per row, thumb cluster has 3 keys on left and 2 keys on right (a gap is left for the trackball on the right thumb).
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Regular keys
+  // -----------------------------------------------------------------------------------------
+  // |  tab   |  Q  |  W  |  E    |  R   |  T  |              |  Y  |  U   |  I  |  O  |  P  |  swtch mse  |
+  // |  esc   |  A  |  S  | D(alf)| F(hm)|  G  |              |  H  |  J   |  K  |  L  |  '  |  '          |
+  // |  shft  |  Z  |  X  |  C    |  V   |  B  |              |  N  |  M   |  ,  |  .  |  ;  |  entr       |
+  //                      |  cmd  | L1   | MSE (Rght) |             | spc  |bspc |
   [0] = LAYOUT_split_3x6_3(
-    KC_TAB,    KC_Q,       KC_W,       KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     KC_BSPC,
-    KC_ESC,    KC_A,       KC_S,       KC_D,       MT(MOD_LGUI, KC_F),        KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
-    KC_LSFT,   KC_Z,       KC_X,       KC_C,       KC_V,        KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
-                                       KC_LGUI,    MO(1),       B_MOUSE,             KC_NO,    KC_SPC,     MO(2)                        
-  ),
-  // Macro layer
-	[1] = LAYOUT_split_3x6_3(
-    KC_TAB,    KC_1,       KC_2,       KC_3,       QK_CLEAR_EEPROM,       M_SWITCH_MOUSE,               KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_BSPC,
-    KC_ESC,    KC_4,       KC_5,       KC_6,       M_ALFRED,    M_HMRW,              KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_NO,
-    KC_LSFT,   KC_7,       KC_8,       KC_9,       M_SCRSHT,    KC_NO,             KC_NO,    KC_NO,       KC_NO,      KC_NO,    KC_NO,    KC_LCTL,
-                                       KC_0,       MO(1),       B_MOUSE,             KC_NO,    KC_SPC,      MO(2)                          
+    KC_TAB,    KC_Q,       KC_W,       KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     M_SWITCH_MOUSE,
+    KC_ESC,    KC_A,       KC_S,       D_ALFD,     F_HMRW,      KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
+    KC_LSFT,   KC_Z,       KC_X,       TD(TD_COPY_URL),     V_PSTE,      KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
+                                       KC_LGUI,    TO(1),       BTN_MOUSE,           KC_NO,    KC_SPC,     KC_BSPC                      
   ),
   // Symbolic/numeric layer
-  [2] = LAYOUT_split_3x6_3(
-    KC_TAB,    KC_EXLM,    KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_UP,    KC_7,     KC_8,    KC_9,  KC_ASTR,  KC_RABK,
-    KC_ESC,    KC_HASH,    KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_DOWN,  KC_4,     KC_5,    KC_6,  KC_PLUS,  KC_LABK,
-    KC_LSFT,   KC_PERC,    KC_CIRC,    KC_LCBR,    KC_RCBR,       KC_TILD,             KC_AMPR,  KC_1,     KC_2,    KC_3,  KC_SLSH,  KC_EQL,
-                                       KC_LGUI,    MO(1),         B_MOUSE,             KC_NO,    KC_SPC,   KC_0                        
+  // -----------------------------------------------------------------------------------------
+  // |    |  !  |  @  |  [  |  ]  |  |  |              |  -  |  7 |  8  |  9  |  *  | / or \ |
+  // | L0 |  #  |  $  |  (  |  )  |  `  |              |  _  |  4 |  5  |  6  |  +  |  =     |
+  // |    |  %  |  ^  |  {  |  }  |  ~  |              |  &  |  1 |  2  |  3  |  0  |  entr  |
+  //                  |  -  | L2  | MSE (Rght) |             |  spc | bspc|
+  [1] = LAYOUT_split_3x6_3(
+    KC_NO,    KC_EXLM,    KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_UNDS,    KC_7,     KC_8,    KC_9,  KC_ASTR,  SLSH,
+    TO(0),    KC_HASH,    KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_MINS,  KC_4,     KC_5,    KC_6,  KC_PLUS,  KC_EQL,
+    KC_NO,    KC_PERC,    KC_CIRC,    KC_LCBR,    KC_RCBR,       KC_TILD,             KC_AMPR,  KC_1,     KC_2,    KC_3,  KC_0,  KC_ENTER,
+                                      KC_LGUI,    TO(2),         BTN_MOUSE,           KC_NO,    KC_0,     KC_BSPC                        
   ),
+  // media layer
+  [2] = LAYOUT_split_3x6_3(
+    KC_NO,    KC_NO,       KC_NO,       KC_F14,                KC_F15,          KC_NO,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    TO(0),    KC_NO,       KC_NO,       KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,    KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+                                        KC_NO,                 TO(0),           BTN_MOUSE,            KC_NO,     KC_SPC,      KC_BSPC                      
+  ), 
+  // nav layer
+  [3] = LAYOUT_split_3x6_3(
+    KC_NO,    KC_NO,       KC_NO,       KC_F14,                KC_F15,          KC_NO,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    TO(0),    KC_NO,       KC_NO,       KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,    KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+                                        KC_NO,                 TO(0),           BTN_MOUSE,            KC_NO,     KC_SPC,      KC_BSPC                      
+  ), 
 };
 
 // Modify these alues to adjust the scrolling speed
