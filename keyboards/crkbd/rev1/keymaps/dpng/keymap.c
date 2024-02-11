@@ -150,7 +150,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Regular keys
   // -----------------------------------------------------------------------------------------
   // |  tab       |  Q      |  W(cls)  | E       | R         |  T  |              |  Y  |  U   |  I  |  O  |  P  |  swtch mse  |
-  // |  esc(caps) |  A      |  S       | D(alf)  | F(hm)     |  G  |              |  H  |  J   |  K  |  L  |  '  |  '          |
+  // |  esc(caps) |  A      |  S(sav)  | D(alf)  | F(hm)     |  G  | scrl |       |  H  |  J   |  K  |  L  |  '  |  '          |
   // |  shft      |  Z(und) |  X       | C(copy) | V(pste)   |  B  |              |  N  |  M   |  ,  |  .  |  ;  |  entr       |
   //                        |  cmd     | L1      | MSE (Rght)|                          | spc(ctrl)  |bspc |
   [0] = LAYOUT_split_3x6_3(
@@ -162,9 +162,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Symbolic/numeric layer
   // -----------------------------------------------------------------------------------------
   // |    |  !        |  @  |  [          |  ]  |  |  |              |  -  |  7   |  8  |  9  |  *  | / or \ |
-  // | L0 |  #        |  $  |  (          |  )  |  `  |              |  _  |  4   |  5  |  6  |  +  |  =     |
-  // |    |  %(redo)  |  ^  |  {(c url)  |  }  |  ~  |               |  &  |  1   |  2  |  3  |  0  |  entr  |
-  //                  |  -  | L2          | MSE (Rght) |             |  spc | bspc|
+  // | L0 |  #        |  $  |  (          |  )  |  `  | arrw |       |  _  |  4   |  5  |  6  |  +  |  =     |
+  // |    |  %(redo)  |  ^  |  {(c url)   |  }  |  ~  |              |  &  |  1   |  2  |  3  |  0  |  entr  |
+  //                  |  -  | L2          | clck|                    | mse |  spc | bspc|
   [1] = LAYOUT_split_3x6_3(
     KC_NO,        KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,  KC_7,     KC_8,    KC_9,  KC_ASTR,  SLSH,
     TO(0),        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,  KC_4,     KC_5,    KC_6,  KC_PLUS,  KC_EQL,
@@ -174,9 +174,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // media layer
   // -----------------------------------------------------------------------------------------
   // |    |     |  scrsht  |  br- |      |  br+  |              |     |      |     |     |     |     |
-  // | L0 |     |  scrrec  |  <<  | >/|| |  >>   |              |     |      |     |     |     |     |
+  // | L0 |     |  scrrec  |  <<  | >/|| |  >>   | arrw |       |     |      |     |     |     |     |
   // |    |     |          |  v-  |  v0  |  v+   |              |     |      |     |     |     |     |
-  //                       |      |      | MSE (Rght) |               |  spc | bspc|
+  //                       |      |      | clck  |              | mse | spc | bspc|
   [2] = LAYOUT_split_3x6_3(
     KC_NO,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     TO(0),    KC_NO,       M_SCRREC,    KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
@@ -186,9 +186,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // blank (for future use)
   // -----------------------------------------------------------------------------------------
   // |    |     |     |     |     |     |              |     |      |     |     |     |     |
-  // | L0 |     |     |     |     |     |              |     |      |     |     |     |     |
+  // | L0 |     |     |     |     |     | arrw |       |     |      |     |     |     |     |
   // |    |     |     |     |     |     |              |     |      |     |     |     |     |
-  //                  |     |     | MSE (Rght) |             |  spc | bspc|
+  //                  |     |     |clck |              | mse |  spc | bspc|
 };
 
 // Modify these alues to adjust the scrolling speed
@@ -243,7 +243,7 @@ report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, re
     }
     
     // Layer not 2: sub trackball scroll, main trackball mouse
-    if (!layer_state_is(2)) {
+    if (layer_state_is(0)) {
         // Calculate and accumulate scroll values based on mouse movement and divisors
         scroll_accumulated_h += (float)sub_report.x / SCROLL_DIVISOR_H;
         scroll_accumulated_v += (float)sub_report.y / SCROLL_DIVISOR_V;
@@ -281,7 +281,7 @@ report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, re
     }
 
     // Layer 2: sub trackball arrow keys, main trackball mouse
-    if (layer_state_is(2)) {
+    if (!layer_state_is(0)) {
         // move one space per click here, biasing towards vertical
         // if you are moving in text horizontally and click an accidental
         // vertical, you can just click back.  If you are moving vertically
