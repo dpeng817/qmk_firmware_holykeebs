@@ -133,6 +133,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(SS_LGUI(SS_LSFT("5")));
       }
       return true;
+    case S_SAVE:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd s
+        SEND_STRING(SS_LGUI("s"));
+      } else if (record->event.pressed) {
+        tap_code16(KC_S);
+      }
+      return false;
   }
   return true;
 }
@@ -147,7 +155,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //                        |  cmd     | L1      | MSE (Rght)|                          | spc(ctrl)  |bspc |
   [0] = LAYOUT_split_3x6_3(
     KC_TAB,        KC_Q,       W_CLOSE,    KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     M_SWITCH_MOUSE,
-    ESC_CAPSLOCK,  KC_A,       KC_S,       D_ALFD,     F_HMRW,      KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
+    ESC_CAPSLOCK,  KC_A,       S_SAVE,     D_ALFD,     F_HMRW,      KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
     KC_LSFT,       Z_UNDO,     KC_X,       C_COPY,     V_PSTE,      KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
                                            KC_LGUI,    TO(1),       BTN_MOUSE,           KC_NO,    RCTL_T(KC_SPC),     KC_BSPC                      
   ),
