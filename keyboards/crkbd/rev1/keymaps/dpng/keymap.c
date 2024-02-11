@@ -25,8 +25,6 @@ enum custom_keycodes {
   M_SCRREC, // Starts a screen recording
 };
 
-bool caps_lock_on = false;
-
 
 // For mouse switching behavior
 bool mouse_switch = false;
@@ -95,12 +93,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (!record->tap.count && record->event.pressed) {
         // Press caps lock
         tap_code16(KC_CAPS);
-        caps_lock_on = !caps_lock_on;
       } else if (record->event.pressed) {
         tap_code16(KC_ESC);
-        if (caps_lock_on) { // Allow escape to turn off caps lock
-          tap_code16(KC_CAPS);
-        }
       }
       return false;
     case Z_UNDO:
@@ -154,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3(
     KC_TAB,        KC_Q,       W_CLOSE,    KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     M_SWITCH_MOUSE,
     ESC_CAPSLOCK,  KC_A,       KC_S,       D_ALFD,     F_HMRW,      KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
-    KC_LSFT,       KC_Z,       KC_X,       C_COPY,     V_PSTE,      KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
+    KC_LSFT,       Z_UNDO,     KC_X,       C_COPY,     V_PSTE,      KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
                                            KC_LGUI,    TO(1),       BTN_MOUSE,           KC_NO,    RCTL_T(KC_SPC),     KC_BSPC                      
   ),
   // Symbolic/numeric layer
