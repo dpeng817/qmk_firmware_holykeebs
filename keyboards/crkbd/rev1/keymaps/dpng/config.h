@@ -8,7 +8,7 @@
 
 // The right hand with the thumb trackball is master here.
 #define MASTER_RIGHT
-#define TAPPING_TERM 300
+#define TAPPING_TERM 200
 
 // #define PERMISSIVE_HOLD
 
