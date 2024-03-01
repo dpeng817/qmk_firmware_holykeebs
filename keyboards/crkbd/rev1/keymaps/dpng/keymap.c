@@ -16,6 +16,7 @@
 #define SLSH LT(0, KC_SLSH)
 #define PERC_REDO LT(0, KC_PERC)
 #define LCBR_URL LT(0, KC_LCBR)
+#define SPC_CTRL LT(0, KC_SPC)
 
 
 
@@ -141,6 +142,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_code16(KC_S);
       }
       return false;
+    case SPC_CTRL:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd s
+        SEND_STRING(SS_LCTL(" "));
+      } else if (record->event.pressed) {
+        tap_code16(KC_SPC);
+      }
+      return false;
   }
   return true;
 }
@@ -157,7 +166,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,        KC_Q,       W_CLOSE,    KC_E,       KC_R,        KC_T,                KC_Y,     KC_U,       KC_I,       KC_O,      KC_P,     M_SWITCH_MOUSE,
     ESC_CAPSLOCK,  KC_A,       S_SAVE,     D_ALFD,     F_HMRW,      KC_G,                KC_H,     KC_J,       KC_K,       KC_L,      KC_SCLN,  KC_QUOT,
     KC_LSFT,       Z_UNDO,     KC_X,       C_COPY,     V_PSTE,      KC_B,                KC_N,     KC_M,       KC_COMM,    KC_DOT,    KC_SLSH,  KC_ENTER,
-                                           KC_LGUI,    TO(1),       KC_BTN1,           KC_NO,    RCTL_T(KC_SPC),     KC_BSPC                      
+                                           KC_LGUI,    TO(1),       KC_BTN1,           KC_NO,    LCTL_T(KC_SPC),     KC_BSPC                      
   ),
   // Symbolic/numeric layer
   // -----------------------------------------------------------------------------------------
@@ -166,10 +175,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // |    |  %(redo)  |  ^  |  {(c url)   |  }  |  ~  |              |  &  |  1   |  2  |  3  |  0  |  entr  |
   //                  |  -  | L2          | clck|                    | mse |  spc | bspc|
   [1] = LAYOUT_split_3x6_3(
-    KC_NO,        KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,  KC_7,     KC_8,    KC_9,  KC_ASTR,  SLSH,
+    KC_TAB,        KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,  KC_7,     KC_8,    KC_9,  KC_ASTR,  SLSH,
     TO(0),        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,  KC_4,     KC_5,    KC_6,  KC_PLUS,  KC_EQL,
     KC_NO,        PERC_REDO,    KC_CIRC,    LCBR_URL,   KC_RCBR,       KC_TILD,             KC_MINS,  KC_1,     KC_2,    KC_3,  KC_0,  KC_ENTER,
-                                            KC_LGUI,    TO(2),         KC_BTN2,           KC_NO,    RCTL_T(KC_SPC),     KC_BSPC                        
+                                            KC_LGUI,    TO(2),         KC_BTN2,           KC_NO,    LCTL_T(KC_SPC),     KC_BSPC                        
   ),
   // media layer
   // -----------------------------------------------------------------------------------------
@@ -178,10 +187,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // |    |     |          |  v-  |  v0  |  v+   |              |     |      |     |     |     |     |
   //                       |      |      | clck  |              | mse | spc | bspc|
   [2] = LAYOUT_split_3x6_3(
-    KC_NO,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_TAB,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     TO(0),    KC_NO,       M_SCRREC,    KC_MPRV,               KC_MPLY,         KC_MNXT,              KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     KC_NO,    KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,     KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-                                        KC_NO,                 TO(0),           KC_BTN2,            KC_NO,     KC_SPC,      KC_BSPC                      
+                                        KC_NO,                 TO(0),           KC_BTN2,            KC_NO,     LCTL_T(KC_SPC),      KC_BSPC                      
   ), 
   // blank (for future use)
   // -----------------------------------------------------------------------------------------
@@ -215,14 +224,14 @@ report_mouse_t last_right_report;
 
 
 // Arrow keys slight slowing
-#define ARROW_STEP 20
+#define ARROW_STEP 50
 int accumulated_arrow_x = 0;
 int accumulated_arrow_y = 0;
 
 float average_arrow_x = 0;
 float average_arrow_y = 0;
 
-#define ARROW_MOMENTUM 0.01
+#define ARROW_MOMENTUM 0.005
 
 report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, report_mouse_t right_report) {
     // Get time elapsed since last update
