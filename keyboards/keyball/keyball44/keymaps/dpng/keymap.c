@@ -163,24 +163,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default
   [0] = LAYOUT_universal(
-    KC_TAB   , KC_Q     , W_CLOSE  , KC_E            , KC_R         , KC_T           ,                                        KC_Y     , KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
-    KC_ESC   , KC_A     , S_SAVE   , D_ALFD          , F_HMRW       , KC_G           ,                                        KC_H     , KC_J        , KC_K           , KC_L     , KC_SCLN  , S(KC_7)  ,
-    KC_LSFT  , Z_UNDO   , KC_X     , C_COPY          , V_PSTE       , KC_B           ,                                        KC_N     , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_INT1  ,
-               KC_LALT  , KC_OPT   , KC_LGUI         , LT(2,KC_LCTL), LT(1, KC1_BTN1),                                        KC_BSPC  , KC_SPC, _______        , _______  , KC_PSCR
+    KC_TAB   , KC_Q     , W_CLOSE  , KC_E            , KC_R         , KC_T           ,                                        KC_Y          , KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
+    KC_ESC   , KC_A     , S_SAVE   , D_ALFD          , F_HMRW       , KC_G           ,                                        KC_H          , KC_J        , KC_K           , KC_L     , KC_SCLN  , KC_QUOT  ,
+    KC_LSFT  , Z_UNDO   , KC_X     , C_COPY          , V_PSTE       , KC_B           ,                                        KC_N          , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_ENTER ,
+               KC_LALT  , KC_ROPT  , KC_LGUI         , KC_LCTL,       LT(1, KC_BTN1) ,                                        LT(2, KC_SPC) , KC_BSPC     , _______        , _______ , KC_PSCR
   ),
 
   [1] = LAYOUT_universal(
-    KC_TAB,       KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,  KC_7,     KC_8,    KC_9,    KC_ASTR,  SLSH,
-    TO(0),        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,  KC_4,     KC_5,    KC_6,    KC_PLUS,  KC_EQL,
-    KC_NO,        PERC_REDO,    KC_CIRC,    LCBR_URL,   KC_RCBR,       KC_TILD,             KC_MINS,  KC_1,     KC_2,    KC_3,    KC_0,     KC_ENTER,
-                  KC_LGUI,      KC_LGUI,    KC_LGUI,    TO(2),         KC_BTN2,             KC_SPC,   KC_BSPC,  _______, _______, KC_PSCR 
+    KC_TAB,       KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,        KC_7,          KC_8,    KC_9,    KC_ASTR,  SLSH,
+    TO(0),        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,        KC_4,          KC_5,    KC_6,    KC_PLUS,  KC_EQL,
+    KC_NO,        PERC_REDO,    KC_CIRC,    LCBR_URL,   KC_RCBR,       KC_TILD,             KC_MINS,        KC_1,          KC_2,    KC_3,    KC_0,     KC_ENTER,
+                  KC_LGUI,      KC_LGUI,    KC_LGUI,    KC_LCTL,       _______,             LT(2, KC_SPC) , KC_BSPC     ,  _______, _______, KC_PSCR 
   ),
 
   [2] = LAYOUT_universal(
-    KC_TAB,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    TO(0),     KC_NO,       M_SCRREC,    KC_MPRV,               KC_MPLY,         KC_MNXT,               KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    KC_NO,     KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,     KC_NO,     KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-               KC_LGUI,     KC_LGUI,     KC_NO,                 TO(0),           KC_BTN2,               KC_SPC,    KC_BSPC,     _______    , _______  ,  KC_PSCR  
+    KC_TAB,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    TO(0),     KC_NO,       M_SCRREC,    KC_MPRV,               KC_MPLY,         KC_MNXT,               KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,     KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,     KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+               KC_LGUI,     KC_LGUI,     KC_NO,                 _______,         _______,               LT(2, KC_SPC) , KC_BSPC,     _______    , _______  ,  KC_PSCR  
   ),
 };
 // clang-format on
