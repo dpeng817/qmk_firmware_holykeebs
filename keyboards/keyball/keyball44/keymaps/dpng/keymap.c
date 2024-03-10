@@ -73,13 +73,12 @@ void oledkit_render_info_user(void) {
 
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
-  debug_enable=true;
+  // debug_enable=true;
   // debug_matrix=true;
   // debug_keyboard=true;
-  debug_mouse=true;
+  // debug_mouse=true;
 }
 
 report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, report_mouse_t right_report) {
-  print("entered pointing_device_task_combined_user\n"); 
   return pointing_device_combine_reports(left_report, right_report);
 }
