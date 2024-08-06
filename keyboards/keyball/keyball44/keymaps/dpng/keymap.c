@@ -164,30 +164,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default
   [0] = LAYOUT_universal(
     KC_TAB   ,        KC_Q     , W_CLOSE  ,        KC_E            , KC_R         ,  KC_T           ,                                        KC_Y          , KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
-    LT(1, KC_ESC)   , KC_A     , S_SAVE   ,        D_ALFD          , F_HMRW       ,  KC_G           ,                                        KC_H          , KC_J        , KC_K           , KC_L     , KC_SCLN  , KC_QUOT  ,
+    KC_ESC   , KC_A     , S_SAVE   ,        D_ALFD          , F_HMRW       ,  KC_G           ,                                               KC_H          , LT(2, KC_J) , KC_K           , KC_L     , KC_SCLN  , KC_QUOT  ,
     KC_LSFT  ,        Z_UNDO   , KC_X     ,        C_COPY          , V_PSTE       ,  KC_B           ,                                        KC_N          , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_ENTER ,
-                      KC_LALT  , KC_LCTL  ,        KC_LGUI         , KC_LCTL       , KC_BTN1        ,                                        KC_BSPC,        LT(2, KC_SPC),_______        , _______ , KC_PSCR
+                      KC_LALT  , KC_LCTL  ,        KC_LGUI         , KC_LCTL       , KC_BTN1        ,                                        KC_BSPC,        LT(1, KC_SPC),_______        , _______ , KC_PSCR
   ),
-
+  // programming symbols
   [1] = LAYOUT_universal(
     KC_TAB,       KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,        KC_7,          KC_8,    KC_9,    KC_ASTR,  SLSH,
-    TO(0),        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,        KC_4,          KC_5,    KC_6,    KC_PLUS,  KC_EQL,
+    KC_NO,        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,        KC_4,          KC_5,    KC_6,    KC_PLUS,  KC_EQL,
     KC_NO,        PERC_REDO,    KC_CIRC,    LCBR_URL,   KC_RCBR,       KC_TILD,             KC_MINS,        KC_1,          KC_2,    KC_3,    KC_0,     KC_ENTER,
-                  KC_LGUI,      KC_LGUI,    KC_LGUI,    _______,       KC_BTN1,             KC_BSPC,        LT(2, KC_SPC),  _______, _______, KC_PSCR 
+                  KC_LGUI,      KC_LGUI,    KC_LGUI,    KC_LEFT_ALT,       KC_BTN1,             KC_BSPC,        KC_NO,  _______, _______, KC_PSCR 
   ),
-
+  // navigation
   [2] = LAYOUT_universal(
-    KC_TAB,    KC_NO,       M_SCRSHT,    KC_F14,                KC_NO,           KC_F15,                KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    TO(0),     KC_NO,       M_SCRREC,    KC_MPRV,               KC_MPLY,         KC_MNXT,               KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-    KC_NO,     KC_NO,       KC_NO,       KC_KB_VOLUME_DOWN,     KC_KB_MUTE,      KC_KB_VOLUME_UP	,     KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
-               KC_LGUI,     KC_LGUI,     KC_NO,                 _______,         _______,               KC_BSPC,        LT(2, KC_SPC),     _______    , _______  ,  KC_PSCR  
+    KC_TAB,    KC_NO,       KC_NO,       KC_UP,                 KC_NO,           KC_NO,                KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,     KC_NO,       KC_RIGHT,    KC_DOWN,               KC_LEFT,         KC_NO,               KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+    KC_NO,     KC_NO,       KC_NO,       KC_NO,     KC_NO,      KC_NO	,     KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
+               KC_LGUI,     KC_LGUI,     KC_NO,                 KC_LEFT_ALT,         KC_BTN1,               KC_BSPC,        KC_NO,     _______    , _______  ,  KC_PSCR  
   ),
 };
 // clang-format on
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     // Auto enable scroll mode when the highest layer is 3
-    keyball_set_scroll_mode(get_highest_layer(state) == 1);
+    keyball_set_scroll_mode(get_highest_layer(state) == 2);
     return state;
 }
 
