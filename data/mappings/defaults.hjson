@@ -53,41 +53,11 @@
         "liatris": {
             "board": "QMK_PM2040",
             "bootloader": "rp2040",
-<<<<<<< HEAD
-            "board": "QMK_PM2040"
         },
         "imera": {
             "processor": "RP2040",
             "bootloader": "rp2040",
             "board": "QMK_PM2040"
-=======
-            "processor": "RP2040"
-        },
-        "michi": {
-            "board": "QMK_PM2040",
-            "bootloader": "rp2040",
-            "processor": "RP2040"
-        },
-        "promicro": {
-            "bootloader": "caterina",
-            "pin_compatible": "promicro",
-            "processor": "atmega32u4"
-        },
-        "promicro_rp2040": {
-            "board": "QMK_PM2040",
-            "bootloader": "rp2040",
-            "processor": "RP2040"
-        },
-        "proton_c": {
-            "board": "QMK_PROTON_C",
-            "bootloader": "stm32-dfu",
-            "processor": "STM32F303"
-        },
-        "stemcell": {
-            "board": "STEMCELL",
-            "bootloader": "tinyuf2",
-            "processor": "STM32F411"
->>>>>>> c1b385ce0f (Sort defaults.hjson (#22587))
         }
     }
 }

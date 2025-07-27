@@ -9,7 +9,8 @@ _qmk_install_prepare() {
         return 1
     fi
 
-    brew update && brew upgrade --formulae --ignore-pinned
+    # --ignore-pinned is not available in Homebrew 4.0.0
+    # brew update && brew upgrade --formulae --ignore-pinned
 }
 
 _qmk_install() {

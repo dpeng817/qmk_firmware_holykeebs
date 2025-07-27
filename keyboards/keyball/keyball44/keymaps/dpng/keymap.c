@@ -22,22 +22,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "print.h"
 
 #define BTN_MOUSE LT(0, KC_BTN1)
-#define F_HMRW LT(0, KC_F)
-#define D_ALFD LT(0, KC_D)
-#define C_COPY LT(0, KC_C)
-#define V_PSTE LT(0, KC_V)
-#define W_CLOSE LT(0, KC_W)
+#define E_ALFD LT(0, KC_E)
+#define R_HMRW LT(0, KC_R)
+#define W_SCRSHT LT(0, KC_W)
+#define X_HMRW_SCROLL LT(0, KC_X)
+#define C_HMRW_SEARCH LT(0, KC_C)
 #define ESC_CAPSLOCK LT(0, KC_ESC)
 #define Z_UNDO LT(0, KC_Z)
-#define S_SAVE LT(0, KC_S)
+// TODO: viable cheatsheet
+#define Q_CHEAT LT(0, KC_Q)
 #define SLSH LT(0, KC_SLSH)
-#define PERC_REDO LT(0, KC_PERC)
-#define LCBR_URL LT(0, KC_LCBR)
 #define SPC_CTRL LT(0, KC_SPC)
 
 enum custom_keycodes {
-  M_SCRSHT = SAFE_RANGE, // Takes a screenshot
-  M_SCRREC, // Starts a screen recording
+  M_SCRREC = SAFE_RANGE, // Starts a screen recording
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -50,20 +48,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_code16(KC_BTN2);
       }
       return false;
-    // opens alfred in arc mode
-    case D_ALFD:
-      if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd space (delay 50) space
-        SEND_STRING(SS_LGUI(" ") SS_DELAY(50) SS_TAP(X_SPC));
-      }
-      return true;
-    // activates homerow
-    case F_HMRW:
-      if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd shift s
-        SEND_STRING(SS_LGUI(SS_LSFT("s")));
-      }
-      return true;
     case SLSH:
       if (!record->tap.count && record->event.pressed) {
         tap_code16(KC_SLSH);
@@ -71,30 +55,56 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_code16(KC_BSLS);
       }
       return false;
-    case C_COPY:
+    case Q_CHEAT:
       if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd c
-        SEND_STRING(SS_LGUI("c"));
-      } else if (record->event.pressed) {
-        tap_code16(KC_C);
+        // Send a cheatsheet as typed text
+        SEND_STRING("=== KEYMAP CHEATSHEET ===\n"
+                   "HOME ROW MODS:\n"
+                   "A=Cmd S=Alt D=Ctrl F=Shift \n\n"
+                   "SPECIAL HOLDS:\n"
+                   "Q=Cheatsheet W=Screenshot E=Alfred R=Homerow X=Scroll\n"
+                   "G=Numbers H=Symbols Enter=Navigation  \n\n"
+                   "NUMBERS (Hold G): Q=1 W=2 E=3 R=4 T=5 Y=6 U=7 I=8 O=9 P=0\n\n"
+                   "SYMBOLS (Hold H):\n"
+                   "Top: Q=! W=@ E=# R=$ T=% Y=^ U=& I=* O=( P=)\n"
+                   "Home: A=[ S=] D={ F=} G=\\ J=_ I=+ K=- L==\n\n"
+                   "SHORTCUTS:\n"
+                   "Z=Undo(Cmd+Z)\n"
+                   "Common: Cmd+C Cmd+V Cmd+S Cmd+W via home row mods\n");
       }
-      return false;
-    case V_PSTE:
+      return true;
+    // takes screenshot
+    case W_SCRSHT:
       if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd v
-        SEND_STRING(SS_LGUI("v"));
-      } else if (record->event.pressed) {
-        tap_code16(KC_V);
+        // Sequence is cmd shift 4
+        SEND_STRING(SS_LGUI(SS_LSFT("4")));
       }
-      return false;
-    case W_CLOSE:
+      return true;
+    case E_ALFD:
       if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd w
-        SEND_STRING(SS_LGUI("w"));
-      } else if (record->event.pressed) {
-        tap_code16(KC_W);
+        // Sequence is cmd space
+        SEND_STRING(SS_LGUI(" "));
       }
-      return false;  
+      return true;
+    // activates homerow
+    case R_HMRW:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd shift r
+        SEND_STRING(SS_LGUI(SS_LSFT("r")));
+      }
+      return true;  
+    case X_HMRW_SCROLL:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is ctrl cmd shift m
+        SEND_STRING(SS_LCTL(SS_LGUI(SS_LSFT("m"))));
+      }
+      return true;  
+    case C_HMRW_SEARCH:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is ctrl cmd shift f
+        SEND_STRING(SS_LCTL(SS_LGUI(SS_LSFT("f"))));
+      }
+      return true;  
     case ESC_CAPSLOCK:
       if (!record->tap.count && record->event.pressed) {
         // Press caps lock
@@ -111,42 +121,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         tap_code16(KC_Z);
       }
       return false;
-    case PERC_REDO:
-      if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd shft z
-        SEND_STRING(SS_LGUI(SS_LSFT("z")));
-      } else if (record->event.pressed) {
-        tap_code16(KC_PERC);
-      }
-      return false;
-    case LCBR_URL:
-      if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd shift c
-        SEND_STRING(SS_LGUI(SS_LSFT("c")));
-      } else if (record->event.pressed) {
-        tap_code16(KC_LCBR);
-      }
-      return false;
-    case M_SCRSHT:
-      if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd shift 4
-        SEND_STRING(SS_LGUI(SS_LSFT("4")));
-      }
-      return true;
     case M_SCRREC:
       if (!record->tap.count && record->event.pressed) {
         // Sequence is cmd shift 5
         SEND_STRING(SS_LGUI(SS_LSFT("5")));
       }
       return true;
-    case S_SAVE:
-      if (!record->tap.count && record->event.pressed) {
-        // Sequence is cmd s
-        SEND_STRING(SS_LGUI("s"));
-      } else if (record->event.pressed) {
-        tap_code16(KC_S);
-      }
-      return false;
     case SPC_CTRL:
       if (!record->tap.count && record->event.pressed) {
         // Sequence is cmd s
@@ -159,24 +139,33 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default
   [0] = LAYOUT_universal(
-    KC_TAB   ,        KC_Q     , W_CLOSE  ,        KC_E            , KC_R         ,  KC_T           ,                                        KC_Y          , KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
-    KC_ESC   , KC_A     , S_SAVE   ,        D_ALFD          , F_HMRW       ,  KC_G           ,                                               KC_H          , LT(2, KC_J) , KC_K           , KC_L     , KC_SCLN  , KC_QUOT  ,
-    KC_LSFT  ,        Z_UNDO   , KC_X     ,        C_COPY          , V_PSTE       ,  KC_B           ,                                        KC_N          , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_ENTER ,
-                      KC_LALT  , KC_LCTL  ,        KC_LGUI         , KC_LCTL       , KC_BTN1        ,                                        KC_BSPC,        LT(1, KC_SPC),_______        , _______ , KC_PSCR
+    KC_TAB   ,        KC_Q     , W_SCRSHT  ,        E_ALFD            , R_HMRW         ,  KC_T    , KC_Y          , KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
+    KC_ESC   , LGUI_T(KC_A), LALT_T(KC_S),  LCTL_T(KC_D), LSFT_T(KC_F),  LT(1, KC_G)   , LT(2, KC_H)   , KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT  ,
+    KC_LGUI  ,        Z_UNDO   , X_HMRW_SCROLL     ,        C_HMRW_SEARCH          , KC_V       ,  KC_B    , KC_N          , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_LCTL ,
+                      KC_LALT  , KC_LCTL  ,        KC_RSFT         , KC_SPC       , KC_BTN1 , KC_BSPC,        LT(3, KC_ENT),_______        , _______ , KC_PSCR
   ),
-  // programming symbols
+  // numbers layer (hold G)
   [1] = LAYOUT_universal(
-    KC_TAB,       KC_EXLM,      KC_AT,      KC_LBRC,    KC_RBRC,       KC_PIPE,             KC_AMPR,        KC_7,          KC_8,    KC_9,    KC_ASTR,  SLSH,
-    KC_NO,        KC_HASH,      KC_DLR,     KC_LPRN,    KC_RPRN,       KC_GRV,              KC_UNDS,        KC_4,          KC_5,    KC_6,    KC_PLUS,  KC_EQL,
-    KC_NO,        PERC_REDO,    KC_CIRC,    LCBR_URL,   KC_RCBR,       KC_TILD,             KC_MINS,        KC_1,          KC_2,    KC_3,    KC_0,     KC_ENTER,
-                  KC_LGUI,      KC_LGUI,    KC_LGUI,    KC_LEFT_ALT,       KC_BTN1,             KC_BSPC,        KC_NO,  _______, _______, KC_PSCR 
+    _______,      KC_1,         KC_2,       KC_3,       KC_4,          KC_5,                KC_6,           KC_7,          KC_8,    KC_9,    KC_0,     _______,
+    _______,      _______,      _______,    _______,    _______,       _______,             _______,        _______,       _______,  _______,  _______,  _______,
+    _______,      _______,      _______,    _______,    _______,       _______,             _______,        _______,       _______,  _______,  _______,  _______,
+                  _______,      _______,    _______,    _______,           _______,             _______,        KC_SPC,  _______, _______, _______ 
   ),
-  // navigation
+  // symbols layer (hold H)  
   [2] = LAYOUT_universal(
+    _______,      KC_EXLM,      KC_AT,      KC_HASH,    KC_DLR,        KC_PERC,             KC_CIRC,        KC_AMPR,       KC_ASTR,  KC_LPRN,  KC_RPRN,  _______,
+    _______,      KC_LBRC,      KC_RBRC,    KC_LCBR,    KC_RCBR,       KC_PIPE,             KC_BSLS,        KC_UNDS,       KC_PLUS,  KC_MINS,  KC_EQL,   _______,
+    _______,      KC_GRV,       KC_TILD,    _______,    _______,       _______,             _______,        _______,       _______,  _______,  _______,  _______,
+                  _______,      _______,    _______,    _______,           _______,             _______,        KC_SPC,  _______, _______, _______ 
+  ),
+  // navigation layer
+  [3] = LAYOUT_universal(
     KC_TAB,    KC_NO,       KC_NO,       KC_UP,                 KC_NO,           KC_NO,                KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     KC_NO,     KC_NO,       KC_RIGHT,    KC_DOWN,               KC_LEFT,         KC_NO,               KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
     KC_NO,     KC_NO,       KC_NO,       KC_NO,     KC_NO,      KC_NO	,     KC_NO,          KC_NO,       KC_NO,       KC_NO,      KC_NO,     KC_NO,
@@ -185,9 +174,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+
 layer_state_t layer_state_set_user(layer_state_t state) {
     // Auto enable scroll mode when the highest layer is 3
-    keyball_set_scroll_mode(get_highest_layer(state) == 2);
+    keyball_set_scroll_mode(get_highest_layer(state) == 3);
     return state;
 }
 
