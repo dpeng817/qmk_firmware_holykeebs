@@ -62,7 +62,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                    "HOME ROW MODS:\n"
                    "A=Cmd S=Alt D=Ctrl F=Shift \n\n"
                    "SPECIAL HOLDS:\n"
-                   "Q=Cheatsheet W=Screenshot E=Alfred R=Homerow X=Scroll\n"
+                   "Q=Cheatsheet W=Screenshot E=Alfred R=Homerow X=Scroll C=Search\n"
                    "G=Numbers H=Symbols Enter=Navigation  \n\n"
                    "NUMBERS (Hold G): Q=1 W=2 E=3 R=4 T=5 Y=6 U=7 I=8 O=9 P=0\n\n"
                    "SYMBOLS (Hold H):\n"
@@ -147,7 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_universal(
     KC_TAB   ,        KC_Q     , W_SCRSHT  ,        E_ALFD            , R_HMRW         ,  KC_T    , KC_Y          , KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
     KC_ESC   , LGUI_T(KC_A), LALT_T(KC_S),  LCTL_T(KC_D), LSFT_T(KC_F),  LT(1, KC_G)   , LT(2, KC_H)   , KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT  ,
-    KC_LGUI  ,        Z_UNDO   , X_HMRW_SCROLL     ,        C_HMRW_SEARCH          , KC_V       ,  KC_B    , KC_N          , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_LCTL ,
+    KC_LGUI  ,        Z_UNDO   , X_HMRW_SCROLL     ,        KC_C          , KC_V       ,  KC_B    , KC_N          , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_LCTL ,
                       KC_LALT  , KC_LCTL  ,        KC_RSFT         , KC_SPC       , KC_BTN1 , KC_BSPC,        LT(3, KC_ENT),_______        , _______ , KC_PSCR
   ),
   // numbers layer (hold G)
