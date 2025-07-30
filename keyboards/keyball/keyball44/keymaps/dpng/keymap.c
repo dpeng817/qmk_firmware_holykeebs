@@ -160,8 +160,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // symbols layer (hold H)  
   [2] = LAYOUT_universal(
     _______,      KC_EXLM,      KC_AT,      KC_HASH,    KC_DLR,        KC_PERC,             KC_CIRC,        KC_AMPR,       KC_ASTR,  KC_LPRN,  KC_RPRN,  _______,
-    _______,      KC_LBRC,      KC_RBRC,    KC_LCBR,    KC_RCBR,       KC_PIPE,             KC_BSLS,        KC_UNDS,       KC_PLUS,  KC_MINS,  KC_EQL,   _______,
-    _______,      KC_GRV,       KC_TILD,    _______,    _______,       _______,             _______,        _______,       _______,  _______,  _______,  _______,
+    _______,      KC_LBRC,      KC_RBRC,    KC_LCBR,    KC_RCBR,       KC_PIPE,             _______,        KC_UNDS,       KC_PLUS,  KC_MINS,  KC_EQL,   _______,
+    _______,      KC_GRV,       KC_TILD,    _______,    _______,       _______,             _______,        KC_BSLS,       _______,  _______,  _______,  _______,
                   _______,      _______,    _______,    _______,           _______,             _______,        KC_SPC,  _______, _______, _______ 
   ),
   // navigation layer
