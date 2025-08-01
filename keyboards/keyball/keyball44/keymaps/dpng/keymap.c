@@ -25,6 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define E_ALFD LT(0, KC_E)
 #define R_HMRW LT(0, KC_R)
 #define W_SCRSHT LT(0, KC_W)
+// custom bettertouchtool script which is used to open ghostty upon typing cmd option y
+#define Y_GHOSTTY LT(0, KC_Y)
 #define X_HMRW_SCROLL LT(0, KC_X)
 #define C_HMRW_SEARCH LT(0, KC_C)
 #define ESC_CAPSLOCK LT(0, KC_ESC)
@@ -80,6 +82,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING(SS_LGUI(SS_LSFT("4")));
       }
       return true;
+    // focuses/defocuses ghostty
+    case Y_GHOSTTY:
+      if (!record->tap.count && record->event.pressed) {
+        // Sequence is cmd option y
+        SEND_STRING(SS_LGUI(SS_LALT("y")));
+      }
+      return true;
+
     case E_ALFD:
       if (!record->tap.count && record->event.pressed) {
         // Sequence is cmd space
@@ -145,7 +155,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default
   [0] = LAYOUT_universal(
-    KC_TAB   ,        KC_Q     , W_SCRSHT  ,        E_ALFD            , R_HMRW         ,  KC_T    , KC_Y          , KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
+    KC_TAB   ,        KC_Q     , W_SCRSHT  ,        E_ALFD            , R_HMRW         ,  KC_T    , Y_GHOSTTY, KC_U        , KC_I           , KC_O     , KC_P     , KC_DEL   ,
     KC_ESC   , LGUI_T(KC_A), LALT_T(KC_S),  LCTL_T(KC_D), LSFT_T(KC_F),  LT(1, KC_G)   , LT(2, KC_H)   , KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT  ,
     KC_LGUI  ,        Z_UNDO   , X_HMRW_SCROLL     ,        KC_C          , KC_V       ,  KC_B    , KC_N          , KC_M        , KC_COMM        , KC_DOT   , KC_SLSH  , KC_LCTL ,
                       KC_LALT  , KC_LCTL  ,        KC_RSFT         , KC_SPC       , KC_BTN1 , KC_BSPC,        LT(3, KC_ENT),_______        , _______ , KC_PSCR
